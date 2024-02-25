@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import "./Profile.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { getUsers, getUsersOnly } from "../../features/userSlice";
+import { GetUserByID, getUsers, getUsersOnly } from "../../features/userSlice";
 import { UseContext } from "../hooks/UseContext";
 
 
@@ -10,15 +10,14 @@ const Profile = () => {
   const { currentUserID } = useContext(UseContext);
 
 const dispatch = useDispatch();
-const CurrentUser = useSelector((state) => state.user.userOnly);
+const CurrentUser = useSelector((state) => state.user.userID);
 
 	const [isUpdate, setIsUpdate]=useState(false);
 	const handleIsUpdateChange=()=>{
 		setIsUpdate(!isUpdate);
 	}
   useEffect(() => {
-    dispatch(getUsersOnly(currentUserID));
-    console.log("===============users================");
+    dispatch(GetUserByID(currentUserID));
     console.log(CurrentUser);
  
   }, [dispatch]);
@@ -26,7 +25,7 @@ const CurrentUser = useSelector((state) => state.user.userOnly);
     <>
       <div className="profile-container">
         <div className="profile-content">
-          <h2>{CurrentUser[0].userEmail}</h2>
+           <h2>{CurrentUser?.userEmail}</h2> 
           <div className="profile-information">
             <div className="profile-info-content">
               <h4>First Name :</h4>
@@ -38,14 +37,14 @@ const CurrentUser = useSelector((state) => state.user.userOnly);
               <h4>City :</h4>
             </div>
             <div className="profile-info-content">
-              {isUpdate ? (
+           {isUpdate ? (
                 <input value={"Omar Driouch "} />
               ) : (
-                <h4>{CurrentUser[0].firstName}</h4>
+                <h4>{CurrentUser?.firstName}</h4>
               )}
-              <h4>{CurrentUser[0].lastName}</h4>
-              <h4>{CurrentUser[0].userEmail} </h4>
-              <h4>{CurrentUser[0].userPassword}</h4>
+              <h4>{CurrentUser?.lastName}</h4>
+              <h4>{CurrentUser?.userEmail} </h4>
+              <h4>{CurrentUser?.userPassword}</h4>
               <h4>Male </h4>
               <h4>0626880254</h4>
               <h4>Kenitra</h4>

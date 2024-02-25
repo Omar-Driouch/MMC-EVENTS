@@ -5,7 +5,7 @@ export const UseContext = createContext();
 export const UseContextProvider = ({ children }) => {
   const [isAuth, setIsAuth] = useState(false);
   const [userRole, setUserRole] = useState("User");
-  const [currentUserID, setCurrentUserID] = useState(0);
+  const [currentUserID, setCurrentUserID] = useState(4);
 
   function setIsAuthenticatedToggle(value, role) {
     setIsAuth(value);

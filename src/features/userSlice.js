@@ -38,6 +38,13 @@ export const UpdateUser = createAsyncThunk("User/UpdateUser", async (user) => {
   return response.data;
 });
 
+
+export const GetUserByID = createAsyncThunk("User", async (userID) => {
+  const response = await axios.get(linkAPI + "User" + `/${userID}`);
+
+  return response.data;
+});
+
 const initialState = {
   users: [],
   usersStatus: "idle",
@@ -58,6 +65,19 @@ const userSlice = createSlice({
         state.users = action.payload;
       })
       .addCase(getUsers.rejected, (state, action) => {
+        state.usersStatus = "failed";
+        state.usersError = action.error.message;
+      })
+
+      .addCase(GetUserByID.pending, (state) => {
+        state.usersStatus = "loading";
+      })
+      .addCase(GetUserByID.fulfilled, (state, action) => {
+        state.usersStatus = "succeded";
+        state.userID = action.payload;
+      
+      })
+      .addCase(GetUserByID.rejected, (state, action) => {
         state.usersStatus = "failed";
         state.usersError = action.error.message;
       })
