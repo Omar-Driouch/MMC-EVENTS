@@ -16,9 +16,10 @@ export default function LoginForm() {
   const dispatch = useDispatch();
   const navigateTo = useNavigate();
 
-  const UserExist = useSelector((state)=>state.user.UserExist);
-  const usersStatus = useSelector((state)=>state.user.usersStatus);
-  const usersError = useSelector((state)=>state.user.usersError);
+  const UserExist = useSelector((state) => state.user.UserExist);
+  const usersStatus = useSelector((state) => state.user.usersStatus);
+  const usersError = useSelector((state) => state.user.usersError);
+  const [loggedIn,setLoggedIn]=useState(false);
 
   const { setIsAuthenticatedToggle, handleSetCurrentUser } =
     useContext(UseContext);
@@ -30,36 +31,65 @@ export default function LoginForm() {
     setUserPassword(event.target.value);
   };
 
- 
+
   const handleSubmit = (event) => {
     event.preventDefault();
-
-    dispatch(CheckIfUserIsExist({username: username,userPassword:userPassword }));
-
-    if(usersStatus == "succeded")
-    {
-      console.log(UserExist);
-    }
-    handleRedirect();
-
-  
+    simulateAsyncOperation().then((result) => {
       
-    };
- 
-    const handleRedirect =()=>
-    {
+      dispatch(CheckIfUserIsExist({ username: username, userPassword: userPassword }));
+      if (username===UserExist.userEmail && userPassword === UserExist.userPassword)
+      {
+        setLoggedIn(true);
+        console.log(UserExist);
+      }
+    });
+    
+  };
 
-      if (UserExist.userID !== null) {
-        setIsAuthenticatedToggle(true, "User");
-        handleSetCurrentUser(UserExist);
-        localStorage.setItem("isLoggedIn", true);
-        navigateTo("/AdminDashboard");
+
+  function simulateAsyncOperation() {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const result = Math.random() < 0.5;
+        resolve(result);
+      }, 3000); 
+    });
+  }
+
+
+  const handleRedirect = () => {
+
+    
+   
+    
+
+    if (loggedIn === true) {
+      setIsAuthenticatedToggle(true, "User");
+      handleSetCurrentUser(UserExist);
+      localStorage.setItem("isLoggedIn", true);
+      navigateTo("/AdminDashboard");
+      setUserPassword("");
+      setUsername("");
+      setLoggedIn(false);
     }
+     
+
   }
 
   useEffect(() => {
-   
-  }, [dispatch])
+    
+     
+      if(loggedIn)
+      {
+
+        handleRedirect();
+      }
+      console.log("loggedIn",loggedIn);
+    
+    
+  
+    
+  }, [dispatch, UserExist, loggedIn])
   return (
     <section className="login-section">
       <div className="left">
