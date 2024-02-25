@@ -45,6 +45,17 @@ export const GetUserByID = createAsyncThunk("User", async (userID) => {
   return response.data;
 });
 
+export const CheckIfUserIsExist = createAsyncThunk(
+  "User/check-user-exists",
+  async ( obj ) => {
+    console.log({obj});
+    const response = await axios.get(
+      `${linkAPI}User/check-user-exists?userEmail=${obj.username}&userPassword=${obj.userPassword}`
+    );
+    return response.data;
+  }
+);
+
 const initialState = {
   users: [],
   usersStatus: "idle",
@@ -68,6 +79,23 @@ const userSlice = createSlice({
         state.usersStatus = "failed";
         state.usersError = action.error.message;
       })
+
+
+
+      .addCase(CheckIfUserIsExist.pending, (state) => {
+        state.usersStatus = "loading";
+      })
+      .addCase(CheckIfUserIsExist.fulfilled, (state, action) => {
+        state.usersStatus = "succeded";
+        state.UserExist = action.payload;
+      
+      })
+      .addCase(CheckIfUserIsExist.rejected, (state, action) => {
+        state.usersStatus = "failed";
+        state.usersError = action.error.message;
+      })
+
+
 
       .addCase(GetUserByID.pending, (state) => {
         state.usersStatus = "loading";

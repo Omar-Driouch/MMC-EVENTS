@@ -7,25 +7,18 @@ import { UseContext } from "../hooks/UseContext";
 
 
 const Profile = () => {
-  const { currentUserID } = useContext(UseContext);
+  const { currentUser } = useContext(UseContext);
 
-const dispatch = useDispatch();
-const CurrentUser = useSelector((state) => state.user.userID);
-
-	const [isUpdate, setIsUpdate]=useState(false);
-	const handleIsUpdateChange=()=>{
-		setIsUpdate(!isUpdate);
-	}
-  useEffect(() => {
-    dispatch(GetUserByID(currentUserID));
-    console.log(CurrentUser);
  
-  }, [dispatch]);
+ 
+    console.log("currentUser",currentUser);
+    
+
   return (
     <>
       <div className="profile-container">
         <div className="profile-content">
-           <h2>{CurrentUser?.userEmail}</h2> 
+           <h2>{currentUser?.userEmail}</h2> 
           <div className="profile-information">
             <div className="profile-info-content">
               <h4>First Name :</h4>
@@ -37,21 +30,19 @@ const CurrentUser = useSelector((state) => state.user.userID);
               <h4>City :</h4>
             </div>
             <div className="profile-info-content">
-           {isUpdate ? (
-                <input value={"Omar Driouch "} />
-              ) : (
-                <h4>{CurrentUser?.firstName}</h4>
-              )}
-              <h4>{CurrentUser?.lastName}</h4>
-              <h4>{CurrentUser?.userEmail} </h4>
-              <h4>{CurrentUser?.userPassword}</h4>
+            
+                <h4>{currentUser?.firstName}</h4>
+              
+              <h4>{currentUser?.lastName}</h4>
+              <h4>{currentUser?.userEmail} </h4>
+              <h4>{currentUser?.userPassword}</h4>
               <h4>Male </h4>
               <h4>0626880254</h4>
               <h4>Kenitra</h4>
             </div>
           </div>
           <div className="button-conatiner">
-            <button onClick={handleIsUpdateChange}>Update Information</button>
+            <button >Update Information</button>
           </div>
           <div className="profile-sessions">
             <h2>List of all the sessions that is the user afftectd to </h2>

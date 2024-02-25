@@ -5,7 +5,7 @@ export const UseContext = createContext();
 export const UseContextProvider = ({ children }) => {
   const [isAuth, setIsAuth] = useState(false);
   const [userRole, setUserRole] = useState("User");
-  const [currentUserID, setCurrentUserID] = useState(4);
+  const [currentUser, setCurrentUser] = useState({});
 
   function setIsAuthenticatedToggle(value, role) {
     setIsAuth(value);
@@ -13,14 +13,14 @@ export const UseContextProvider = ({ children }) => {
     
   }
 
-  function handleSetCurrentUser(userID) {
+  function handleSetCurrentUser(SetCurrentUser) {
 
-    setCurrentUserID(userID);
+    setCurrentUser(SetCurrentUser);
   }
   return (
     <UseContext.Provider
       value={{
-        currentUserID,
+        currentUser,
         isAuth,
         userRole,
         setIsAuthenticatedToggle,

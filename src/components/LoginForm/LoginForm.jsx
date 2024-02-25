@@ -8,14 +8,17 @@ import VpnKeyOutlinedIcon from "@mui/icons-material/VpnKeyOutlined";
 import { auth } from "../../features/firebaseAuth";
 import { UseContext } from "../hooks/UseContext";
 import { useDispatch, useSelector } from "react-redux";
-import { getUsers } from "../../features/userSlice";
+import { CheckIfUserIsExist, getUsers } from "../../features/userSlice";
 
 export default function LoginForm() {
   const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [userPassword, setUserPassword] = useState("");
   const dispatch = useDispatch();
   const navigateTo = useNavigate();
-  const users = useSelector((state) => state.user.users);
+
+  const UserExist = useSelector((state)=>state.user.UserExist);
+  const usersStatus = useSelector((state)=>state.user.usersStatus);
+  const usersError = useSelector((state)=>state.user.usersError);
 
   const { setIsAuthenticatedToggle, handleSetCurrentUser } =
     useContext(UseContext);
@@ -24,37 +27,39 @@ export default function LoginForm() {
     setUsername(event.target.value);
   };
   const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
-  };
-  
-  const checkIfEmailExist = (email) => {
-    const check = users.some((user) => user.userEmail === email  );
-    
-    return check;
+    setUserPassword(event.target.value);
   };
 
+ 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if(checkIfEmailExist(username))
+    dispatch(CheckIfUserIsExist({username: username,userPassword:userPassword }));
+
+    if(usersStatus == "succeded")
     {
-      if (users.some((user) => user.userPassword === password)) {
-         setIsAuthenticatedToggle(true,"User");
-          const user = users.find((user) => user.userEmail === username);
-          handleSetCurrentUser(parseInt(user.userID));
-         localStorage.setItem("isLoggedIn", true);
-          navigateTo("/AdminDashboard");
-      }
+      console.log(UserExist);
     }
-    else{
+    handleRedirect();
+
+  
+      
+    };
  
-      console.log(checkIfEmailExist(username));
+    const handleRedirect =()=>
+    {
+
+      if (UserExist.userID !== null) {
+        setIsAuthenticatedToggle(true, "User");
+        handleSetCurrentUser(UserExist);
+        localStorage.setItem("isLoggedIn", true);
+        navigateTo("/AdminDashboard");
     }
-       
-  };
-useEffect(()=>{
-  dispatch(getUsers());
-},[dispatch])
+  }
+
+  useEffect(() => {
+   
+  }, [dispatch])
   return (
     <section className="login-section">
       <div className="left">
@@ -83,7 +88,7 @@ useEffect(()=>{
               <div className="passwordInput">
                 <input
                   type="password"
-                  value={password}
+                  value={userPassword}
                   onChange={handlePasswordChange}
                   placeholder="password"
                 />
