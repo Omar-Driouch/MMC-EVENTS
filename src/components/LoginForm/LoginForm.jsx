@@ -32,19 +32,24 @@ export default function LoginForm() {
   };
 
 
-  const handleSubmit = (event) => {
+
+
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    simulateAsyncOperation().then((result) => {
-      
-      dispatch(CheckIfUserIsExist({ username: username, userPassword: userPassword }));
-      if (username===UserExist.userEmail && userPassword === UserExist.userPassword)
-      {
+    try {
+      await dispatch(CheckIfUserIsExist({ username, userPassword }));
+      await simulateAsyncOperation();
+      if (username === UserExist?.userEmail && userPassword === UserExist?.userPassword) {
         setLoggedIn(true);
         console.log(UserExist);
+        console.log("UserExist");
       }
-    });
-    
+    } catch (error) {
+      console.error("Error occurred:", error);
+    }
   };
+  
 
 
   function simulateAsyncOperation() {

@@ -48,7 +48,7 @@ export const GetUserByID = createAsyncThunk("User", async (userID) => {
 export const CheckIfUserIsExist = createAsyncThunk(
   "User/check-user-exists",
   async ( obj ) => {
-    console.log({obj});
+    
     const response = await axios.get(
       `${linkAPI}User/check-user-exists?userEmail=${obj.username}&userPassword=${obj.userPassword}`
     );
