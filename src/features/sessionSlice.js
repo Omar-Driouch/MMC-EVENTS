@@ -11,9 +11,9 @@ export const getSessionsByID = createAsyncThunk(
   "Session/getSessionsByID",
   async (EventID) => {
     const response = await axios.get(linkAPI + `Session/${EventID}`);
-    console.log("====================================");
-    console.log(response.data);
-    console.log("====================================");
+    //console.log("====================================");
+    //console.log(response.data);
+    //console.log("====================================");
     return response.data;
   }
 );

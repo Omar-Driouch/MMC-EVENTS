@@ -3,7 +3,7 @@ import axios from "axios";
 import { linkAPI } from "./data";
 
 export const getUsers = createAsyncThunk("User/getUsersOnly", async () => {
-  const response = await axios.get(linkAPI + "User/All");
+  const response = await axios.get(linkAPI + "User");
   return response.data;
 });
 
@@ -45,12 +45,12 @@ export const GetUserByID = createAsyncThunk("User", async (userID) => {
   return response.data;
 });
 
-export const CheckIfUserIsExist = createAsyncThunk(
-  "User/check-user-exists",
+export const Login = createAsyncThunk(
+  "User/Login",
   async ( obj ) => {
     
     const response = await axios.get(
-      `${linkAPI}User/check-user-exists?userEmail=${obj.username}&userPassword=${obj.userPassword}`
+      `${linkAPI}User/Login?userEmail=${obj.username}&userPassword=${obj.userPassword}`
     );
     return response.data;
   }
@@ -82,15 +82,15 @@ const userSlice = createSlice({
 
 
 
-      .addCase(CheckIfUserIsExist.pending, (state) => {
+      .addCase(Login.pending, (state) => {
         state.usersStatus = "loading";
       })
-      .addCase(CheckIfUserIsExist.fulfilled, (state, action) => {
+      .addCase(Login.fulfilled, (state, action) => {
         state.usersStatus = "succeded";
         state.UserExist = action.payload;
       
       })
-      .addCase(CheckIfUserIsExist.rejected, (state, action) => {
+      .addCase(Login.rejected, (state, action) => {
         state.usersStatus = "failed";
         state.usersError = action.error.message;
       })

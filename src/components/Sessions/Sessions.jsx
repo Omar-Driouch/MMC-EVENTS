@@ -18,18 +18,18 @@ const Sessions = () => {
   const events = useSelector((state) => state.event.events);
   const status = useSelector((state) => state.session.sessionsStatus);
 
-  // const [SessionsByEvent, setSessionsByEvent] = useState([]);
+
 
   const [page, setPage] = useState(0);
 
   const itemsPerPage = 6;
 
   useEffect(() => {
-    dispatch(getSessionsByID(17));
+    dispatch(getSessionsByID(parseInt(events[0]?.eventID)));
     dispatch(getEvents());
-    console.log("====================================");
-    console.log(events);
-    console.log("====================================");
+     
+   
+  
   }, [dispatch]);
 
   const handleOnChangeEventName = (EventID) => {
@@ -39,26 +39,26 @@ const Sessions = () => {
   return (
     <div className="admin-events">
       <div
-        class="modal fade"
+        className="modal fade"
         id="addSession"
-        tabindex="-1"
+        tabIndex="-1"
         aria-labelledby="addSessionLabel"
         aria-hidden="true"
       >
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="addSessionLabel">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="addSessionLabel">
                 add session
               </h1>
               <button
                 type="button"
-                class="btn-close"
+                className="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
               ></button>
             </div>
-            <div class="modal-body">
+            <div className="modal-body">
               <form className="add-session-form">
                 <div className="field session-title">
                   <label htmlFor="session-title">event title</label>
@@ -87,9 +87,9 @@ const Sessions = () => {
                     ))}
                   </select>
                 </div>
-                <div class="modal-footer" style={{ width: "100%" }}>
-                  {/* <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> */}
-                  <button type="submit" class="btn btn-primary p-3">
+                <div className="modal-footer" style={{ width: "100%" }}>
+                  {/* <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button> */}
+                  <button type="submit" className="btn btn-primary p-3">
                     add session
                   </button>
                 </div>
@@ -107,7 +107,7 @@ const Sessions = () => {
              onChange={(e)=>handleOnChangeEventName(e.target.value)}
             >
               {events.map((event) => (
-                <option value={event.eventID}>{event.title}</option>
+                <option key={event.eventID} value={event.eventID}>{event.title}</option>
               ))}
             </select>
           </div>

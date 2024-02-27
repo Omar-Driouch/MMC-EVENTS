@@ -8,7 +8,7 @@ import VpnKeyOutlinedIcon from "@mui/icons-material/VpnKeyOutlined";
 import { auth } from "../../features/firebaseAuth";
 import { UseContext } from "../hooks/UseContext";
 import { useDispatch, useSelector } from "react-redux";
-import { CheckIfUserIsExist, getUsers } from "../../features/userSlice";
+import { Login, getUsers } from "../../features/userSlice";
 
 export default function LoginForm() {
   const [username, setUsername] = useState("");
@@ -38,13 +38,15 @@ export default function LoginForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await dispatch(CheckIfUserIsExist({ username, userPassword }));
       await simulateAsyncOperation();
-      if (username === UserExist?.userEmail && userPassword === UserExist?.userPassword) {
-        setLoggedIn(true);
-        console.log(UserExist);
-        console.log("UserExist");
-      }
+       dispatch(Login({ username, userPassword })).then((result)=>{
+      console.log(result.payload);
+      if(result.payload==="Speaker")
+      setLoggedIn(true);
+      console.log(UserExist);
+
+     });
+
     } catch (error) {
       console.error("Error occurred:", error);
     }
