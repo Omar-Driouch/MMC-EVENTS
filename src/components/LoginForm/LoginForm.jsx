@@ -37,10 +37,10 @@ export default function LoginForm() {
     try {
       await simulateAsyncOperation();
        dispatch(Login({ username, userPassword })).then((result)=>{
-      //console.log("this is in the mthos ",result.payload);
-      // if(result.payload==="Speaker")
+      
+      if(result.payload !=="")
        setLoggedIn(true);
-      //console.log("this is in selector ",UserExist);
+      console.log("this is result ",result.payload);
 
      });
 
@@ -65,7 +65,7 @@ export default function LoginForm() {
 
 
     if (loggedIn === true) {
-      console.log("this is in the llogin form ",UserExist);
+       
       setIsAuthenticatedToggle(true, UserExist.UserStatus);
       handleSetCurrentUser(UserExist);  
      
