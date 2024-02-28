@@ -12,30 +12,36 @@ import AdminDashboard from "./components/AdminDashboard/AdminDashboard";
 import { UseContext, UseContextProvider } from "./components/hooks/UseContext";
 import { useContext, useEffect, useState } from "react";
 import About from "./components/About/About";
+import Profile from "./components/Profile/Profile";
 
 function App() {
   const location = useLocation();
   const navigateTo = useNavigate();
   const path = location.pathname;
 
-  const { isAuth, userRole, setIsAuthenticatedToggle } =
+  const { isAuth,currentUser, userRole, setIsAuthenticatedToggle } =
     useContext(UseContext);
 
   useEffect(() => {
     const loggedInStatus = localStorage.getItem("isLoggedIn");
-
+    console.log("whats is this ", currentUser);
     if (loggedInStatus === "true") {
       setIsAuthenticatedToggle(true, "admin");
-      navigateTo("/AdminDashboard");
+     
+      if(currentUser.userStatus ==="Admin")
+      {
+        navigateTo("/AdminDashboard");
+      }
+      
     } else {
       setIsAuthenticatedToggle(false, "user");
       navigateTo("/");
     }
-  }, [isAuth]);
+  }, [isAuth, currentUser]);
 
   return (
     <>
-      {isAuth === true ? (
+      {isAuth === true && currentUser.userStatus ==="Admin"  ?(
         <AdminDashboard />
       ) : (
         <>
@@ -49,11 +55,8 @@ function App() {
             <Route path="/speakers/:id" element={<SpeakerDetails />} />
             <Route path="/register" element={<RegisterForm />} />
             <Route path="/about" element={<About />} />
-            {userRole === "admin" && isAuth === true ? (
-              <Route path="/AdminDashboard" element={<AdminDashboard />} />
-            ) : (
-              <></>
-            )}
+            <Route path="/profile" element={<Profile />} />
+           
           </Routes>
         </>
       )}

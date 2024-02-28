@@ -1,24 +1,41 @@
 import React, { useContext, useEffect, useState } from "react";
 import "./Profile.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { GetUserByID, getUsers, getUsersOnly } from "../../features/userSlice";
+
 import { UseContext } from "../hooks/UseContext";
+import { GetUserByID } from "../../features/userSlice";
 
 
 
 const Profile = () => {
   const { currentUser } = useContext(UseContext);
+  const dispatch = useDispatch();
+  const UserExist = useSelector((state) => state.user.UserID);
+  
+  const [user,setUser] = useState({});
+ 
 
+    useEffect(()=>{
+      const userID = localStorage.getItem("currentUser");
+      console.log("userID",userID);
+      dispatch(GetUserByID(parseInt(userID))).then((result)=>{
+          if(result.meta.requestStatus !== "rejected")
+          {
+            setUser(result.payload);
+          }
+        console.log("userEmail",result.meta.requestStatus);
+      });
+      
+    },[UserExist])
  
- 
-    console.log("currentUser",currentUser);
+    
     
 
   return (
     <>
       <div className="profile-container">
         <div className="profile-content">
-           <h2>{currentUser?.userEmail}</h2> 
+           <h2>{user?.userEmail}</h2> 
           <div className="profile-information">
             <div className="profile-info-content">
               <h4>First Name :</h4>
@@ -31,11 +48,11 @@ const Profile = () => {
             </div>
             <div className="profile-info-content">
             
-                <h4>{currentUser?.firstName}</h4>
+                <h4>{user?.firstName}</h4>
               
-              <h4>{currentUser?.lastName}</h4>
-              <h4>{currentUser?.userEmail} </h4>
-              <h4>{currentUser?.userPassword}</h4>
+              <h4>{user?.lastName}</h4>
+              <h4>{user?.userEmail} </h4>
+              <h4>{user?.userPassword}</h4>
               <h4>Male </h4>
               <h4>0626880254</h4>
               <h4>Kenitra</h4>

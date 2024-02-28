@@ -4,14 +4,52 @@ import mmcLogo from "../../assets/mmcLogo.svg";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-import { auth } from "../../features/firebaseAuth";
+
 import { UseContext } from "../hooks/UseContext";
-import { onAuthStateChanged } from "firebase/auth";
+import { useDispatch, useSelector } from "react-redux";
+import { GetUserByID } from "../../features/userSlice";
+
 
 const Header = () => {
+  const dispatch  = useDispatch();
+  const [user,setUser] = useState({});
+  const User = useSelector((state) => state.user.UserID);
+
+
+
+  const navigateTo = useNavigate();
+  const { isAuth,currentUser, userRole, setIsAuthenticatedToggle } =
+  useContext(UseContext);
   const headerTopRef = useRef(null);
   const [showAccount, setShowAccount] = useState(false);
+  const handleLogoutFucntion = ()=>{
+    localStorage.setItem("isLoggedIn", false);
+    setIsAuthenticatedToggle(false, "User");
+    navigateTo("/");
+  }
+
+
+  const handleGoToProfile = ()=>{
+    navigateTo("/profile");
+  }
+
+  
+
+  
   useEffect(() => {
+    
+    const userID = localStorage.getItem("currentUser");
+    console.log("userID",userID);
+    dispatch(GetUserByID(parseInt(userID))).then((result)=>{
+        if(result.meta.requestStatus !== "rejected")
+        {
+          setUser(result.payload);
+           console.log("Header",User);
+        }
+       
+    });
+
+
     const handleScroll = () => {
       if (window.scrollY > 100) {
         headerTopRef.current.style.boxShadow =
@@ -24,12 +62,15 @@ const Header = () => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
+    
+   
   }, []);
   const navigate = useNavigate();
   const handleRedirectToLogin = ()=>{
     navigate("/login");
     setShowAccount(false);
   }
+  console.log("Header",User);
   return (
     <header className="header" ref={headerTopRef}>
       <div className="container-header">
@@ -70,17 +111,25 @@ const Header = () => {
             </div>
             <div className="account-box">
               <button
-                className="account-icon"
+                className="btn-profile"
                 onClick={() => {
                   setShowAccount(!showAccount);
                 }}
               >
-                <PersonOutlineIcon />
+                <PersonOutlineIcon/>
+             Profile
+             
               </button>
               {showAccount && (
                 <div className="auth-box">
+                  
+                  {isAuth ? (<> <button className="btn login-btn" onClick={handleLogoutFucntion} >Logout</button>
+                  <button className="btn login-btn" onClick={handleGoToProfile} >Profile</button></>) : <>
                   <button className="btn login-btn" onClick={()=>{handleRedirectToLogin()}}>login</button>
                   <Link className="btn register-btn" to="/register">register</Link>
+                  
+                  </>}
+                  
                 </div>
               )}
             </div>

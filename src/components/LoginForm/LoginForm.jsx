@@ -32,18 +32,15 @@ export default function LoginForm() {
   };
 
 
-
-
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       await simulateAsyncOperation();
        dispatch(Login({ username, userPassword })).then((result)=>{
-      console.log(result.payload);
-      if(result.payload==="Speaker")
-      setLoggedIn(true);
-      console.log(UserExist);
+      //console.log("this is in the mthos ",result.payload);
+      // if(result.payload==="Speaker")
+       setLoggedIn(true);
+      //console.log("this is in selector ",UserExist);
 
      });
 
@@ -66,15 +63,15 @@ export default function LoginForm() {
 
   const handleRedirect = () => {
 
-    
-   
-    
 
     if (loggedIn === true) {
-      setIsAuthenticatedToggle(true, "User");
-      handleSetCurrentUser(UserExist);
+      console.log("this is in the llogin form ",UserExist);
+      setIsAuthenticatedToggle(true, UserExist.UserStatus);
+      handleSetCurrentUser(UserExist);  
+     
       localStorage.setItem("isLoggedIn", true);
-      navigateTo("/AdminDashboard");
+      localStorage.setItem("currentUser", UserExist.userID);
+      navigateTo("/");
       setUserPassword("");
       setUsername("");
       setLoggedIn(false);
@@ -91,7 +88,7 @@ export default function LoginForm() {
 
         handleRedirect();
       }
-      console.log("loggedIn",loggedIn);
+      
     
     
   

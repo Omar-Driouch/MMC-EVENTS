@@ -105,20 +105,26 @@ header {
         }
       }
       .account-box {
+         
+        
         position: relative;
-        .account-icon {
-          border: 1px solid $blue;
-          width: 40px;
+        .btn-profile {
+          border: 0px solid $blue;
+          padding: 20px;
+          width: 80px;
           height: 40px;
-          border-radius: 50%;
+          
+          border-radius: 10%;
           background: transparent;
           display: flex;
           align-items: center;
           cursor: pointer;
-          justify-content: center;
-          color: $blue;
+          justify-content: start;
+          color: $white;
+          font-weight: 400;
+          font-size: 1.5rem;
           svg {
-            font-size: 30px;
+            font-size: 2rem;
           }
         }
         .auth-box {

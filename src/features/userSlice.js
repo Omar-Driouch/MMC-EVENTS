@@ -49,7 +49,7 @@ export const Login = createAsyncThunk(
   "User/Login",
   async ( obj ) => {
     
-    const response = await axios.get(
+    const response = await axios.post(
       `${linkAPI}User/Login?userEmail=${obj.username}&userPassword=${obj.userPassword}`
     );
     return response.data;
@@ -103,6 +103,7 @@ const userSlice = createSlice({
       .addCase(GetUserByID.fulfilled, (state, action) => {
         state.usersStatus = "succeded";
         state.userID = action.payload;
+        console.log("state.userID",state.userID);
       
       })
       .addCase(GetUserByID.rejected, (state, action) => {
